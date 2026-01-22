@@ -38,5 +38,4 @@ jobs:
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
           git add -A || true
-          git diff --quiet && git diff --cached --quiet || git commit -m "Auto-update from bot" || true
-          git push || true
+          git diff --quiet && git diff --cached --quiet || (git commit -m "Auto-update from bot" && git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git && git push) || true
