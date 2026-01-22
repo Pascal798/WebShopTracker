@@ -1,0 +1,38 @@
+name: Run Bot Every 5 Minutes
+
+on:
+  schedule:
+    # Alle 5 Minuten ausführen (UTC)
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # Manueller Trigger (Test)
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run bot
+        env:
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        run: python bot.py
+      
+      - name: Push results (if files changed)
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update from bot run" && git push)
