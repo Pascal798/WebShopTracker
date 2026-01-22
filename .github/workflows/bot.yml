@@ -40,7 +40,7 @@ jobs:
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
         run: python bot.py
       
-      - name: Push changes
+      - name: Push changes and trigger next run
         run: |
           git config user.email "actions@github.com"
           git config user.name "Bot"
@@ -50,3 +50,7 @@ jobs:
             git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} &&
             git push
           ) || true
+          # Force another run in 5 minutes by creating an empty commit
+          sleep 2
+          git commit --allow-empty -m "Trigger next run" || true
+          git push || true
