@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   run-bot:
@@ -15,9 +16,9 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
       
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -31,12 +32,14 @@ jobs:
       
       - name: Install Playwright browsers and dependencies
         run: |
-          echo "Installing Playwright browsers..."
+          set -x
+          echo "===== Installing Playwright ====="
           python -m playwright install chromium
-          echo "Installing system dependencies..."
+          echo "===== Installing system dependencies ====="
           python -m playwright install-deps chromium
-          echo "Verifying installation..."
-          python -m playwright --version
+          echo "===== Verifying installation ====="
+          ls -la ~/.cache/ms-playwright/ || echo "Directory not found"
+          python -c "from playwright.sync_api import sync_playwright; print('Playwright loaded successfully')"
       
       - name: Run bot
         env:
@@ -44,13 +47,15 @@ jobs:
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
         run: python bot.py
       
-      - name: Push results (if files changed)
+      - name: Commit and push changes
         if: always()
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          if ! git diff --quiet HEAD; then
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
             git commit -m "Auto-update from bot run"
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+            git push
           fi
