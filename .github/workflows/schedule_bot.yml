@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -27,9 +29,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
-      - name: Install Playwright with dependencies
+      - name: Install Playwright browsers and dependencies
         run: |
-          python -m playwright install --with-deps chromium
+          echo "Installing Playwright browsers..."
+          python -m playwright install chromium
+          echo "Installing system dependencies..."
+          python -m playwright install-deps chromium
+          echo "Verifying installation..."
+          python -m playwright --version
       
       - name: Run bot
         env:
@@ -38,8 +45,12 @@ jobs:
         run: python bot.py
       
       - name: Push results (if files changed)
+        if: always()
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update from bot run" && git push)
+          if ! git diff --quiet HEAD; then
+            git commit -m "Auto-update from bot run"
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+          fi
