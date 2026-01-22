@@ -2,8 +2,7 @@ name: WebShop Bot Runner
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
-    - cron: '0 * * * *'
+    - cron: '* * * * *'
   workflow_dispatch:
 
 permissions:
