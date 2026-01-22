@@ -1,0 +1,49 @@
+name: WebShop Bot Runner
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Install Playwright
+        id: playwright
+        run: |
+          echo "Installing Playwright with dependencies..."
+          python -m playwright install chromium --with-deps
+          echo "Playwright installation complete"
+      
+      - name: Run WebShop Bot
+        env:
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        run: python bot.py
+      
+      - name: Push changes
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "Bot"
+          git add -A
+          git diff --quiet && git diff --cached --quiet || (
+            git commit -m "Bot update $(date -u +'%Y-%m-%d %H:%M:%S UTC')" && 
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} &&
+            git push
+          ) || true
