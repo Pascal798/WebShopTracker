@@ -3,3 +3,25 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Build / distribution artifacts
+dist/
+build/
+
+# Executables and installers
+*.exe
+*.pkg
+*.msi
+
+# Playwright / driver artifacts
+dist/bot/_internal/
+
+# Local runtime files
+bot.log
+products.json
+
+# IDE / OS
+.vscode/
+.idea/
+.pytest_cache/
+
