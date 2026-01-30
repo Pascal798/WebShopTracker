@@ -24,7 +24,14 @@ jobs:
 
       - name: Install system packages (optional)
         run: |
-          sudo apt-get update && sudo apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libasound2 libpangocairo-1.0-0 libcups2 libxss1 libgtk-3-0
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libnss3 libatk1.0-0 libatk-bridge2.0-0 libx11-xcb1 libxcomposite1 libxdamage1 \
+            libxrandr2 libgbm1 libpangocairo-1.0-0 libcups2 libxss1 libgtk-3-0 || true
+          # libasound2 may not be available by that name on newer Ubuntu; try common alternatives
+          if ! dpkg -s libasound2 >/dev/null 2>&1; then
+            sudo apt-get install -y --no-install-recommends libasound2t64 || sudo apt-get install -y --no-install-recommends liboss4-salsa-asound2 || true
+          fi
 
       - name: Install Python dependencies
         run: |
