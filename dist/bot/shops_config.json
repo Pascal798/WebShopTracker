@@ -1,0 +1,69 @@
+{
+  "shops": [
+    {
+      "name": "White Rabbit",
+      "url": "https://www.whiterabbit-cgs.de/shop/Booster-Displays_2",
+      "enabled": true,
+      "type": "white_rabbit",
+      "selectors": {
+        "products": "div.productbox-column",
+        "name": "img",
+        "price": "span.productbox-price",
+        "status_ribbon": "div.ribbon"
+      },
+      "unavailable_indicators": {
+        "status_values": ["Vorverkauf gestoppt", "Nicht verfügbar"],
+        "text_patterns": ["momentan nicht verfügbar", "ausverkauft", "- ausverkauft -"]
+      }
+    },
+    {
+      "name": "World of TCG",
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "enabled": true,
+      "type": "world_of_tcg",
+      "selectors": {
+        "products": "div.artikel-wrapper",
+        "name": "a[href*='/artikel/']",
+        "price": "span",
+        "status_ribbon": "div.artikel-label"
+      },
+      "unavailable_indicators": {
+        "status_values": ["Ausverkauft"],
+        "text_patterns": ["- ausverkauft -", "ausverkauft", "nicht verfügbar"]
+      }
+    },
+    {
+      "name": "Games Island",
+      "url": "https://games-island.eu/c/Kartenspiele/One-Piece-TCG?qf=5",
+      "enabled": false,
+      "type": "games_island",
+      "note": "Website ist sehr komplex (JavaScript-basiert). Die Selektoren konnten nicht automatisch ermittelt werden. Siehe ANLEITUNG.md fuer manuelle Konfiguration.",
+      "selectors": {
+        "products": "div.product-item",
+        "name": "a.product-link",
+        "price": "span.product-price",
+        "status_ribbon": "span.stock-status"
+      },
+      "unavailable_indicators": {
+        "status_values": ["Ausverkauft", "Out of Stock"],
+        "text_patterns": ["ausverkauft", "not in stock", "nicht verfügbar"]
+      }
+    },
+    {
+      "name": "Yonko TCG",
+      "url": "https://yonko-tcg.de/collections/one-piece-displays-deutsch-englisch",
+      "enabled": true,
+      "type": "yonko_tcg",
+      "selectors": {
+        "products": ".product-card",
+        "name": "img",
+        "price": "span",
+        "status_badge": "sold-out-badge"
+      },
+      "unavailable_indicators": {
+        "status_values": [],
+        "text_patterns": ["ausverkauft"]
+      }
+    }
+  ]
+}

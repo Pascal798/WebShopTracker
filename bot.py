@@ -9,9 +9,23 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
+import logging
+import traceback
 
 # Lade Umgebungsvariablen
 load_dotenv()
+
+# Logging konfigurieren: schreibt in bot.log im aktuellen Arbeitsverzeichnis
+logging.basicConfig(
+    filename="bot.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+logger = logging.getLogger(__name__)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+logger.addHandler(console_handler)
 
 urllib3.disable_warnings()
 
@@ -599,91 +613,104 @@ WebShop Tracker Bot
         print(f"    ❌ Email-Fehler: {e}")
         return False
 
-# Hauptprogramm
-print("🔍 Prüfe Webshops...")
-current_products = get_all_products()
-previous_products = load_previous_products()
+def main():
+    logger.info("🔍 Prüfe Webshops...")
+    print("🔍 Prüfe Webshops...")
+    current_products = get_all_products()
+    previous_products = load_previous_products()
 
-print(f"\n📊 Aktuelle Produkte: {len(current_products)}")
-print(f"📊 Vorherige Produkte: {len(previous_products)}")
+    logger.info(f"Aktuelle Produkte: {len(current_products)}; Vorherige: {len(previous_products)}")
+    print(f"\n📊 Aktuelle Produkte: {len(current_products)}")
+    print(f"📊 Vorherige Produkte: {len(previous_products)}")
 
-if previous_products:
-    # Finde Unterschiede
-    new_products = find_new_products(current_products, previous_products)
-    removed_products = find_new_products(previous_products, current_products)
-    price_changes = find_price_changes(current_products, previous_products)
-    status_changes = find_status_changes(current_products, previous_products)
-    availability_changes = find_availability_changes(current_products, previous_products)
-    
-    # Sammle Artikel für Email-Benachrichtigung
-    email_products = []
-    
-    # 1. Neue verfügbare Artikel
-    new_available_products = [p for p in new_products if p.get('available', False)]
-    if new_available_products:
-        email_products.extend(new_available_products)
-        print(f"\n✨ {len(new_available_products)} NEUE VERFÜGBARE ARTIKEL:")
-        for p in new_available_products:
-            shop_tag = f" ({p.get('shop', 'Shop')})" if 'shop' in p else ""
-            status_tag = f" [{p['status']}]" if p.get('status') != 'Verfügbar' else ""
-            print(f"  • {p['name']} ({p['price']}){status_tag}{shop_tag}")
-    
-    # 2. Artikel, die wieder verfügbar wurden
-    restored_products = [p for p in availability_changes if not p['was_available'] and p['now_available']]
-    if restored_products:
-        # Konvertiere availability_changes zu vollständigen Product-Objekten
-        for change in restored_products:
-            product = next((p for p in current_products if p['name'] == change['name']), None)
-            if product:
-                email_products.append(product)
+    if previous_products:
+        # Finde Unterschiede
+        new_products = find_new_products(current_products, previous_products)
+        removed_products = find_new_products(previous_products, current_products)
+        price_changes = find_price_changes(current_products, previous_products)
+        status_changes = find_status_changes(current_products, previous_products)
+        availability_changes = find_availability_changes(current_products, previous_products)
         
-        print(f"\n📦 {len(restored_products)} ARTIKEL WIEDER VERFÜGBAR:")
-        for p in restored_products:
-            print(f"  • {p['name']}: ❌ Nicht verfügbar → ✓ Verfügbar (wieder in Stock!)")
-    
-    # Sende Email nur wenn es neue verfügbare Artikel gibt
-    if email_products:
-        send_available_products_email(email_products)
-    
-    # Zeige restliche Unterschiede
-    if new_products and not new_available_products:
-        print(f"\n✨ {len(new_products)} NEUE ARTIKEL (NICHT VERFÜGBAR):")
-        for p in new_products[:10]:
-            available_tag = "❌ NICHT VERFÜGBAR"
-            status_tag = f" [{p['status']}]" if p.get('status') != 'Verfügbar' else ""
-            shop_tag = f" ({p.get('shop', 'Shop')})" if 'shop' in p else ""
-            print(f"  • {p['name']} ({p['price']}) {available_tag}{status_tag}{shop_tag}")
-        if len(new_products) > 10:
-            print(f"  ... und {len(new_products) - 10} weitere")
-    
-    if removed_products:
-        print(f"\n❌ {len(removed_products)} ENTFERNTE ARTIKEL:")
-        for p in removed_products[:5]:
-            shop_tag = f" ({p.get('shop', 'Shop')})" if 'shop' in p else ""
-            print(f"  • {p['name']}{shop_tag}")
-    
-    if price_changes:
-        print(f"\n💰 {len(price_changes)} PREISÄNDERUNGEN:")
-        for p in price_changes[:5]:
-            print(f"  • {p['name']}: {p['old_price']} → {p['new_price']}")
-    
-    if status_changes:
-        print(f"\n⚠️ {len(status_changes)} STATUSÄNDERUNGEN:")
-        for p in status_changes[:10]:
-            print(f"  • {p['name']}: {p['old_status']} → {p['new_status']}")
-    
-    # Zeige andere Verfügbarkeitswechsel (nicht verfügbar → nicht verfügbar ist uninteressant)
-    other_availability_changes = [p for p in availability_changes if not (not p['was_available'] and p['now_available'])]
-    if other_availability_changes:
-        print(f"\n📦 {len(other_availability_changes)} WEITERE VERFÜGBARKEITSWECHSEL:")
-        for p in other_availability_changes:
-            print(f"  • {p['name']}: Verfügbar → ❌ Momentan nicht verfügbar")
-    
-    if not new_products and not removed_products and not price_changes and not status_changes and not availability_changes:
-        print("\n✅ Keine Änderungen erkannt")
-else:
-    print("\n📝 Erste Prüfung - Speichere Produkte...")
+        # Sammle Artikel für Email-Benachrichtigung
+        email_products = []
+        
+        # 1. Neue verfügbare Artikel
+        new_available_products = [p for p in new_products if p.get('available', False)]
+        if new_available_products:
+            email_products.extend(new_available_products)
+            print(f"\n✨ {len(new_available_products)} NEUE VERFÜGBARE ARTIKEL:")
+            for p in new_available_products:
+                shop_tag = f" ({p.get('shop', 'Shop')})" if 'shop' in p else ""
+                status_tag = f" [{p['status']}]" if p.get('status') != 'Verfügbar' else ""
+                print(f"  • {p['name']} ({p['price']}){status_tag}{shop_tag}")
+        
+        # 2. Artikel, die wieder verfügbar wurden
+        restored_products = [p for p in availability_changes if not p['was_available'] and p['now_available']]
+        if restored_products:
+            # Konvertiere availability_changes zu vollständigen Product-Objekten
+            for change in restored_products:
+                product = next((p for p in current_products if p['name'] == change['name']), None)
+                if product:
+                    email_products.append(product)
+            
+            print(f"\n📦 {len(restored_products)} ARTIKEL WIEDER VERFÜGBAR:")
+            for p in restored_products:
+                print(f"  • {p['name']}: ❌ Nicht verfügbar → ✓ Verfügbar (wieder in Stock!)")
+        
+        # Sende Email nur wenn es neue verfügbare Artikel gibt
+        if email_products:
+            send_available_products_email(email_products)
+        
+        # Zeige restliche Unterschiede
+        if new_products and not new_available_products:
+            print(f"\n✨ {len(new_products)} NEUE ARTIKEL (NICHT VERFÜGBAR):")
+            for p in new_products[:10]:
+                available_tag = "❌ NICHT VERFÜGBAR"
+                status_tag = f" [{p['status']}]" if p.get('status') != 'Verfügbar' else ""
+                shop_tag = f" ({p.get('shop', 'Shop')})" if 'shop' in p else ""
+                print(f"  • {p['name']} ({p['price']}) {available_tag}{status_tag}{shop_tag}")
+            if len(new_products) > 10:
+                print(f"  ... und {len(new_products) - 10} weitere")
+        
+        if removed_products:
+            print(f"\n❌ {len(removed_products)} ENTFERNTE ARTIKEL:")
+            for p in removed_products[:5]:
+                shop_tag = f" ({p.get('shop', 'Shop')})" if 'shop' in p else ""
+                print(f"  • {p['name']}{shop_tag}")
+        
+        if price_changes:
+            print(f"\n💰 {len(price_changes)} PREISÄNDERUNGEN:")
+            for p in price_changes[:5]:
+                print(f"  • {p['name']}: {p['old_price']} → {p['new_price']}")
+        
+        if status_changes:
+            print(f"\n⚠️ {len(status_changes)} STATUSÄNDERUNGEN:")
+            for p in status_changes[:10]:
+                print(f"  • {p['name']}: {p['old_status']} → {p['new_status']}")
+        
+        # Zeige andere Verfügbarkeitswechsel (nicht verfügbar → nicht verfügbar ist uninteressant)
+        other_availability_changes = [p for p in availability_changes if not (not p['was_available'] and p['now_available'])]
+        if other_availability_changes:
+            print(f"\n📦 {len(other_availability_changes)} WEITERE VERFÜGBARKEITSWECHSEL:")
+            for p in other_availability_changes:
+                print(f"  • {p['name']}: Verfügbar → ❌ Momentan nicht verfügbar")
+        
+        if not new_products and not removed_products and not price_changes and not status_changes and not availability_changes:
+            print("\n✅ Keine Änderungen erkannt")
+    else:
+        print("\n📝 Erste Prüfung - Speichere Produkte...")
 
-# Speichere aktuelle Produkte
-save_products(current_products)
-print(f"\n✔️ {len(current_products)} Produkte gespeichert in {PRODUCTS_FILE}")
+    # Speichere aktuelle Produkte
+    save_products(current_products)
+    print(f"\n✔️ {len(current_products)} Produkte gespeichert in {PRODUCTS_FILE}")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+        logger.info("Execution finished successfully")
+    except Exception as e:
+        # Log exception with traceback
+        logger.error("Execution failed with an exception: %s", e)
+        logger.error(traceback.format_exc())
+        raise

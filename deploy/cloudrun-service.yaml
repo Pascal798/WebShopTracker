@@ -1,0 +1,19 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: webshop-tracker
+spec:
+  template:
+    spec:
+      containers:
+        - image: gcr.io/PROJECT_ID/webshoptracker:latest
+          env:
+            - name: GMAIL_ADDRESS
+              value: "YOUR_GMAIL_ADDRESS"
+            - name: GMAIL_PASSWORD
+              value: "YOUR_GMAIL_PASSWORD"
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+      containerConcurrency: 80

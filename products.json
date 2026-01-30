@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-01-22T19:35:46.102223",
-  "count": 26,
+  "timestamp": "2026-01-30T09:12:31.032547",
+  "count": 36,
   "products": [
     {
       "name": "One Piece Card Game: OP-14 The Azure Seas Seven - Booster",
@@ -91,56 +91,136 @@
       "shop": "White Rabbit"
     },
     {
-      "name": "OP-15 [EN]  [VORVERKAUF - 02.04.2026] - One Piece - Display",
-      "price": "139.99 €",
+      "name": "OP-15 [EN]  [VORVERKAUF - 03.04.2026] - One Piece - Display",
+      "price": "139,99 €",
       "status": "Vorverkauf",
       "available": false,
       "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
       "shop": "World of TCG"
     },
     {
-      "name": "EB-03 [EN]  [VORVERKAUF - 19.02.2026] - One Piece - Display",
-      "price": "199.99 €",
+      "name": "OP 17 [EN]  [VORVERKAUF - 31.12.2026] - One Piece - Display",
+      "price": "120,99 €",
       "status": "Vorverkauf",
       "available": false,
       "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
       "shop": "World of TCG"
     },
     {
-      "name": "OP-16 [EN]  [VORVERKAUF - 11.06.2026] - One Piece - Display",
-      "price": "129.99 €",
+      "name": "EB-03 [EN]  [VORVERKAUF - 20.02.2026] - One Piece - Display",
+      "price": "199,99 €",
       "status": "Vorverkauf",
       "available": false,
       "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
       "shop": "World of TCG"
     },
     {
-      "name": "ST-30 [EN]  [VORVERKAUF - 11.06.2026] - One Piece - Starter Deck",
-      "price": "22.99 €",
+      "name": "OP-16 [EN]  [VORVERKAUF - 12.06.2026] - One Piece - Display",
+      "price": "129,99 €",
+      "status": "Vorverkauf",
+      "available": false,
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "shop": "World of TCG"
+    },
+    {
+      "name": "ST-30 [EN]  [VORVERKAUF - 12.06.2026] - One Piece - Starter Deck",
+      "price": "29,99 €",
       "status": "Vorverkauf",
       "available": true,
       "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
       "shop": "World of TCG"
     },
     {
-      "name": "Best Selection Vol.5 [EN]  [VORVERKAUF - 12.02.2026] - One Piece - Premium Card Collection",
-      "price": "29.99 €",
+      "name": "ST-31 [EN]  [VORVERKAUF - 31.07.2026] - One Piece - Starter Deck",
+      "price": "19,99 €",
+      "status": "Vorverkauf",
+      "available": true,
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "shop": "World of TCG"
+    },
+    {
+      "name": "ST-32 [EN]  [VORVERKAUF - 31.07.2026] - One Piece - Starter Deck",
+      "price": "19,99 €",
+      "status": "Vorverkauf",
+      "available": true,
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "shop": "World of TCG"
+    },
+    {
+      "name": "ST-33 [EN]  [VORVERKAUF - 31.07.2026] - One Piece - Starter Deck",
+      "price": "19,99 €",
+      "status": "Vorverkauf",
+      "available": true,
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "shop": "World of TCG"
+    },
+    {
+      "name": "ST-34 [EN]  [VORVERKAUF - 31.07.2026] - One Piece - Starter Deck",
+      "price": "19,99 €",
+      "status": "Vorverkauf",
+      "available": true,
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "shop": "World of TCG"
+    },
+    {
+      "name": "ST-35 [EN]  [VORVERKAUF - 31.07.2026] - One Piece - Starter Deck",
+      "price": "19,99 €",
+      "status": "Vorverkauf",
+      "available": true,
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "shop": "World of TCG"
+    },
+    {
+      "name": "ST-36 [EN]  [VORVERKAUF - 31.07.2026] - One Piece - Starter Deck",
+      "price": "19,99 €",
+      "status": "Vorverkauf",
+      "available": true,
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "shop": "World of TCG"
+    },
+    {
+      "name": "Best Selection Vol.5 [EN]  [VORVERKAUF - 13.02.2026] - One Piece - Premium Card Collection",
+      "price": "29,99 €",
       "status": "Vorverkauf",
       "available": false,
       "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
       "shop": "World of TCG"
     },
     {
-      "name": "DP-10 [EN]  [VORVERKAUF - 02.04.2026] - One Piece - Double Pack",
-      "price": "15.99 €",
+      "name": "DP-10 [EN]  [VORVERKAUF - 03.04.2026] - One Piece - Double Pack",
+      "price": "15,99 €",
       "status": "Vorverkauf",
       "available": false,
       "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
       "shop": "World of TCG"
     },
     {
-      "name": "3rd Anniversary Set [EN]  [VORVERKAUF - 26.03.2026] - One Piece - Deluxe set",
-      "price": "169.99 €",
+      "name": "DP-11 [EN]  [VORVERKAUF - 12.06.2026] - One Piece - Double Pack",
+      "price": "24,99 €",
+      "status": "Vorverkauf",
+      "available": true,
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "shop": "World of TCG"
+    },
+    {
+      "name": "One Piece Card Game Illustration Box IB-07 [EN]  [VORVERKAUF - 31.07.2026] - One Piece - Illustration Box",
+      "price": "39,99 €",
+      "status": "Vorverkauf",
+      "available": false,
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "shop": "World of TCG"
+    },
+    {
+      "name": "One Piece Card Game Illustration Box IB-08 [EN]  [VORVERKAUF - 31.07.2026] - One Piece - Illustration Box",
+      "price": "39,99 €",
+      "status": "Vorverkauf",
+      "available": false,
+      "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
+      "shop": "World of TCG"
+    },
+    {
+      "name": "3rd Anniversary Set [EN]  [VORVERKAUF - 28.08.2026] - One Piece - Deluxe set",
+      "price": "399,99 €",
       "status": "Vorverkauf",
       "available": false,
       "url": "https://worldoftcg.de/de/shop/one-piece?vorverkauf=true",
